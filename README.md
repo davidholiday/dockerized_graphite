@@ -27,7 +27,7 @@ You're also going to need [Docker Compose][6]. This will automate the process of
 how to make it go
 -----------------
 
-**1)** From the **../dockerized_graphite** directory, type 
+**1)** From the **../dockerStuff** directory, type 
 
 > **docker-compose -f compose/docker-compose.yml up -d**
 
@@ -84,18 +84,9 @@ exit out of the container by typing
 
 how to make it stop
 -------------------
-From the **../dockerized_graphite** directory, type 
-
-> **docker-compose -f compose/docker-compose.yml stop**
-
-
-how to make it go again
--------------------
-Now that you've built and the images, the command to restart things is slightly different. If you don't start things this way (ie you forget and type *docker-compose up* instead), the carbon service inside the container won't start and you'll get no metrics data. 
-
 From the **../dockerStuff** directory, type 
 
-> **docker-compose -f compose/docker-compose.yml start**
+> **docker-compose -f compose/docker-compose.yml stop**
 
 
 

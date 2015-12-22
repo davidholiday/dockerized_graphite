@@ -75,10 +75,10 @@ RUN sudo sed -i '$ a \\n[test]\npattern = ^test\.\nretentions = 10s:10m,1m:1h,10
 #RUN sudo graphite-manage syncdb --noinput
 
 
-# fire up carbon
+# fire up carbon and ensure it gets started when the machine does 
 #
 RUN sudo service carbon-cache start
-
+RUN update-rc.d carbon-cache defaults
 
 # update apache conf file to enable access via localhost
 #
