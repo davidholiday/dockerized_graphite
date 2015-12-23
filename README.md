@@ -74,12 +74,15 @@ enter
 
 and respond to the prompts to create an authorized user. Don't forget to write down the username/password for the account you create - you'll need it later! 
 
+Now restart the carbon-cache service:
 
-exit out of the container by typing
+> **sudo service carbon-cache restart**
+
+then exit out of the container by typing
 
 > **exit**
 
-3) Open your browser and goto localhost. You should see the application. If you just synced the database and see a page indicating an internal server error, refresh the page. 
+3) Open your browser and goto localhost. You should see the application. If you just synced the database and see a page indicating an internal server error, refresh the page. What you're looking for is evidence carbon has registered itself. If you don't see carbon listed under the Graphite folder on the left-hand side, wait 60seconds and refresh the page. Carbon, by default, will report to Graphite every 60s so if it hasn't shown up yet you probably just need to wait for the next report cycle to occur. 
 
 
 how to make it stop
@@ -98,7 +101,7 @@ There's lots of neato-burrito stuff you can do to graphite to make it look coole
 troubleshooting 
 -----------------------
 
- - No metrics data? try checking to see if the carbon service is running inside the graphite container. After you've started the containers, type this:
+ - No metrics data? Try checking to see if the carbon service is running and/or needs to be restarted inside the graphite container. After you've started the containers, type this:
 
 > **docker exec -t -i graphite bash**
 
@@ -109,6 +112,10 @@ troubleshooting
 if you don't see  *[ + ]  carbon-cache* listed in the results, type:
 
 > **sudo service carbon-cache start**
+
+else, try restarting the service
+
+> ** sudo service carbon-cache restart **
 
 then
 
@@ -124,4 +131,5 @@ to log out of the container. Refresh the graphite webpage and try again. You sho
   [6]: https://docs.docker.com/compose/install/
   [7]: http://graphite.readthedocs.org/en/latest/dashboard.html
   [8]: http://dashboarddude.com/blog/2013/01/23/dashboards-for-graphite/
+
 
