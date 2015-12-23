@@ -115,7 +115,7 @@ if you don't see  *[ + ]  carbon-cache* listed in the results, type:
 
 else, try restarting the service
 
-> ** sudo service carbon-cache restart **
+> **sudo service carbon-cache restart**
 
 then
 
