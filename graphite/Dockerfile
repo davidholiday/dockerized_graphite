@@ -51,6 +51,10 @@ RUN DB_DEFAULT_PORT_OLD="'PORT': ''" &&\
   DB_DEFAULT_PORT_NEW="'PORT': '5432'" &&\
   sed -i "s|$DB_DEFAULT_PORT_OLD|$DB_DEFAULT_PORT_NEW|" /etc/graphite/local_settings.py
 
+RUN DEFAULT_CACHE_DURATION_OLD="#DEFAULT_CACHE_DURATION = 60" &&\
+  DEFAULT_CACHE_DURATION_NEW="DEFAULT_CACHE_DURATION = 1" &&\
+  sed -i "s|$DEFAULT_CACHE_DURATION_OLD|$DEFAULT_CACHE_DURATION_NEW|" /etc/graphite/local_settings.py
+
 
 # configure carbon
 #
@@ -62,7 +66,26 @@ RUN ENABLE_LOG_ROTATION_OLD="ENABLE_LOGROTATION = False" &&\
   ENABLE_LOG_ROTATION_NEW="ENABLE_LOGROTATION = True" &&\
   sudo sed -i "s|$ENABLE_LOG_ROTATION_OLD|$ENABLE_LOG_ROTATION_NEW|" /etc/carbon/carbon.conf
 
-RUN sudo sed -i '$ a \\n[test]\npattern = ^test\.\nretentions = 10s:10m,1m:1h,10m:1d' etc/carbon/storage-schemas.conf
+RUN CARBON_METRIC_PREFIX_OLD="# CARBON_METRIC_PREFIX = carbon" &&\
+  CARBON_METRIC_PREFIX_NEW="CARBON_METRIC_PREFIX = carbon" &&\
+  sed -i "s|$CARBON_METRIC_PREFIX_OLD|$CARBON_METRIC_PREFIX_NEW|" /etc/carbon/carbon.conf
+
+RUN CARBON_METRIC_INTERVAL_OLD="# CARBON_METRIC_INTERVAL = 60" &&\
+  CARBON_METRIC_INTERVAL_NEW="CARBON_METRIC_INTERVAL = 1" &&\
+  sed -i "s|$CARBON_METRIC_INTERVAL_OLD|$CARBON_METRIC_INTERVAL_NEW|" /etc/carbon/carbon.conf
+
+
+# configure storage-schemas
+#
+RUN STORAGE_RETENTION_OLD="retentions = 60s:1d" &&\
+  STORAGE_RETENTION_NEW="retentions = 1s:6h,1min:7d,10min:5y" &&\
+  sed -i "s|$STORAGE_RETENTION_OLD|$STORAGE_RETENTION_NEW|" /etc/carbon/storage-schemas.conf
+
+RUN STORAGE_RETENTION_CARBON_OLD="retentions = 60:90d" &&\
+  STORAGE_RETENTION_CARBON_NEW="retentions = 1s:6h,1min:7d,10min:5y" &&\
+  sed -i "s|$STORAGE_RETENTION_CARBON_OLD|$STORAGE_RETENTION_CARBON_NEW|" /etc/carbon/storage-schemas.conf
+
+RUN sudo sed -i '$ a \\n[storm]\npattern = ^storm\.\nretentions = 1s:6h,1min:7d,10min:5y' etc/carbon/storage-schemas.conf
 
 
 # sync django and db
@@ -78,7 +101,7 @@ RUN sudo sed -i '$ a \\n[test]\npattern = ^test\.\nretentions = 10s:10m,1m:1h,10
 # fire up carbon and ensure it gets started when the machine does 
 #
 RUN sudo service carbon-cache start
-RUN update-rc.d carbon-cache defaults
+#RUN update-rc.d carbon-cache defaults
 
 # update apache conf file to enable access via localhost
 #
